@@ -1,0 +1,92 @@
+Table hospedes {
+  id_hospede int [pk, increment]
+  nome varchar(100) [not null]
+  email varchar(100) [unique, not null]
+  cpf varchar(14) [unique]
+  telefone varchar(20)
+  data_nascimento date
+  endereco varchar(200)
+}
+
+Table quartos {
+  id_quarto int [pk, increment]
+  numero varchar(10) [unique, not null]
+  tipo varchar(50) [not null]
+  capacidade int
+  preco_diaria decimal(10,2)
+  status varchar(20)
+  descricao varchar(200)
+}
+
+Table reservas {
+  id_reserva int [pk, increment]
+  id_hospede int
+  id_quarto int
+  data_reserva datetime
+  data_checkin date
+  data_checkout date
+  status varchar(20)
+}
+
+Table hospedagens {
+  id_hospedagem int [pk, increment]
+  id_reserva int [unique]
+  id_funcionario int
+  checkin_real datetime
+  checkout_real datetime
+}
+
+Table pagamentos {
+  id_pagamento int [pk, increment]
+  id_hospedagem int
+  valor decimal(10,2)
+  metodo varchar(30)
+  data_pagamento datetime
+  status varchar(20)
+}
+
+Table funcionarios {
+  id_funcionario int [pk, increment]
+  nome varchar(100)
+  cargo varchar(50)
+  telefone varchar(20)
+  email varchar(100)
+}
+
+Table servicos {
+  id_servico int [pk, increment]
+  nome varchar(100)
+  descricao varchar(200)
+  preco decimal(10,2)
+}
+
+Table consumo_servicos {
+  id_consumo int [pk, increment]
+  id_hospedagem int
+  id_servico int
+  quantidade int
+  valor_total decimal(10,2)
+}
+
+Table feedbacks {
+  id_feedback int [pk, increment]
+  id_hospede int
+  id_quarto int
+  nota int
+  comentario text
+  data_feedback datetime
+}
+
+Ref: reservas.id_hospede > hospedes.id_hospede
+Ref: reservas.id_quarto > quartos.id_quarto
+
+Ref: hospedagens.id_reserva > reservas.id_reserva
+Ref: hospedagens.id_funcionario > funcionarios.id_funcionario
+
+Ref: pagamentos.id_hospedagem > hospedagens.id_hospedagem
+
+Ref: consumo_servicos.id_hospedagem > hospedagens.id_hospedagem
+Ref: consumo_servicos.id_servico > servicos.id_servico
+
+Ref: feedbacks.id_hospede > hospedes.id_hospede
+Ref: feedbacks.id_quarto > quartos.id_quarto
